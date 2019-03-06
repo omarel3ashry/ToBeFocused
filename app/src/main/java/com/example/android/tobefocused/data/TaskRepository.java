@@ -1,12 +1,8 @@
 package com.example.android.tobefocused.data;
 
-import android.app.Application;
-import android.os.AsyncTask;
-
 import com.example.android.tobefocused.AppExecutors;
-import com.example.android.tobefocused.data.database.Task;
+import com.example.android.tobefocused.data.database.TaskEntity;
 import com.example.android.tobefocused.data.database.TaskDao;
-import com.example.android.tobefocused.data.database.AppDatabase;
 
 import java.util.List;
 
@@ -33,37 +29,37 @@ public class TaskRepository {
         return sInstance;
     }
 
-    public LiveData<List<Task>> getAllTasks() {
+    public LiveData<List<TaskEntity>> getAllTasks() {
         return mTaskDao.getAllTasks();
     }
 
-    public LiveData<Task> getTask(final int id) {
+    public LiveData<TaskEntity> getTask(final int id) {
         return mTaskDao.getTaskById(id);
     }
 
-    public void addTask(final Task task) {
+    public void addTask(final TaskEntity taskEntity) {
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mTaskDao.addTask(task);
+                mTaskDao.addTask(taskEntity);
             }
         });
     }
 
-    public void updateTask(final Task task) {
+    public void updateTask(final TaskEntity taskEntity) {
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mTaskDao.updateTask(task);
+                mTaskDao.updateTask(taskEntity);
             }
         });
     }
 
-    public void deleteTask(final Task task) {
+    public void deleteTask(final TaskEntity taskEntity) {
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                mTaskDao.deleteTask(task);
+                mTaskDao.deleteTask(taskEntity);
             }
         });
     }

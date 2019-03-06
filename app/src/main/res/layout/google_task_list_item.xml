@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="taskEntity"
-            type="com.example.android.tobefocused.data.database.TaskEntity" />
+            name="googleTaskList"
+            type="com.google.api.services.tasks.model.TaskList" />
     </data>
 
     <LinearLayout
@@ -15,9 +15,9 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/taskTitle"
+            android:id="@+id/googleTaskTitle"
             style="@style/task_title"
-            android:text="@{taskEntity.title}"
+            android:text="@{googleTaskList.title}"
             tools:text="Testing tests" />
 
         <TextView
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:paddingStart="30dp"
             android:paddingEnd="30dp"
-            android:text="@{taskEntity.dateFormatted}" />
+            android:text="@{googleTaskList.id}" />
 
     </LinearLayout>
 </layout>

@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.tobefocused.R;
+import com.example.android.tobefocused.data.database.TaskEntity;
 import com.example.android.tobefocused.databinding.TaskListItemBinding;
-import com.example.android.tobefocused.data.database.Task;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder> {
+public class TasksAdapter extends ListAdapter<TaskEntity, TasksAdapter.TaskViewHolder> {
 
     private TaskClickListener mTaskClickListener;
 
@@ -35,7 +35,7 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
         holder.bind(getItem(position));
     }
 
-    public Task getTaskAtPosition(int position) {
+    public TaskEntity getTaskAtPosition(int position) {
         return getItem(position);
     }
 
@@ -56,21 +56,21 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
 
         }
 
-        void bind(Task task) {
-            binding.setTask(task);
+        void bind(TaskEntity taskEntity) {
+            binding.setTaskEntity(taskEntity);
             binding.executePendingBindings();
         }
 
     }
 
-    private static DiffUtil.ItemCallback<Task> diffCallback = new DiffUtil.ItemCallback<Task>() {
+    private static DiffUtil.ItemCallback<TaskEntity> diffCallback = new DiffUtil.ItemCallback<TaskEntity>() {
         @Override
-        public boolean areItemsTheSame(@NonNull Task oldItem, @NonNull Task newItem) {
+        public boolean areItemsTheSame(@NonNull TaskEntity oldItem, @NonNull TaskEntity newItem) {
             return oldItem.getId() == newItem.getId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull Task oldItem, @NonNull Task newItem) {
+        public boolean areContentsTheSame(@NonNull TaskEntity oldItem, @NonNull TaskEntity newItem) {
             return oldItem.equals(newItem);
         }
     };
@@ -80,6 +80,6 @@ public class TasksAdapter extends ListAdapter<Task, TasksAdapter.TaskViewHolder>
     }
 
     public interface TaskClickListener {
-        void onClick(Task task);
+        void onClick(TaskEntity taskEntity);
     }
 }

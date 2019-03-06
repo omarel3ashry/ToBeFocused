@@ -15,19 +15,19 @@ import androidx.room.Update;
 public interface TaskDao {
 
     @Insert
-    void addTask(Task task);
+    void addTask(TaskEntity taskEntity);
 
     @Query("SELECT * FROM task_table")
-    LiveData<List<Task>> getAllTasks();
+    LiveData<List<TaskEntity>> getAllTasks();
 
     @Query("SELECT * FROM task_table WHERE id = :id")
-    LiveData<Task> getTaskById(int id);
+    LiveData<TaskEntity> getTaskById(int id);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateTask(Task task);
+    void updateTask(TaskEntity taskEntity);
 
     @Delete
-    void deleteTask(Task task);
+    void deleteTask(TaskEntity taskEntity);
 
     @Query("DELETE FROM task_table")
     void deleteAllTasks();

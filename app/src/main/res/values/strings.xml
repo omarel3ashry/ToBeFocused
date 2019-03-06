@@ -4,12 +4,31 @@
     <string name="settings">Settings</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="list_image">Task list background image</string>
-    <string name="action_add">Add new task</string>
+    <string name="list_image">TaskEntity list background image</string>
+    <string name="action_add">Add new taskEntity</string>
     <string name="details_edit_text_hint">Details</string>
     <string name="title_edit_text_hint">Title</string>
     <string name="pick_date">Pick date image button</string>
     <string name="add_btn_text">Add</string>
     <string name="update">Update</string>
     <string name="delete_all">Clear All</string>
+    <string name="task_lists">TaskEntity Lists</string>
+    <string name="options">Options</string>
+    <string name="all_tasks">All Tasks</string>
+    <string name="list_name">List name</string>
+    <string name="index_list">Index</string>
+    <string name="home_list">Home</string>
+    <string name="work_list">Work</string>
+    <string name="other_list">Other</string>
+    <string name="select_list">Select List :</string>
+    <string name="google_tasks">Google Tasks</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="signed_out">No Signed In Account</string>
+    <string-array name="task_lists">
+        <item>@string/index_list</item>
+        <item>@string/home_list</item>
+        <item>@string/work_list</item>
+        <item>@string/other_list</item>
+    </string-array>
 </resources>

@@ -5,7 +5,7 @@ import android.app.Application;
 import com.example.android.tobefocused.AppExecutors;
 import com.example.android.tobefocused.data.TaskRepository;
 import com.example.android.tobefocused.data.database.AppDatabase;
-import com.example.android.tobefocused.data.database.Task;
+import com.example.android.tobefocused.data.database.TaskEntity;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import androidx.lifecycle.LiveData;
 
 class MainViewModel extends AndroidViewModel {
     private TaskRepository mTaskRepository;
-    private LiveData<List<Task>> mAllTasks;
+    private LiveData<List<TaskEntity>> mAllTasks;
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -26,16 +26,12 @@ class MainViewModel extends AndroidViewModel {
     }
 
 
-    public LiveData<List<Task>> getAllTasks() {
+    public LiveData<List<TaskEntity>> getAllTasks() {
         return mAllTasks;
     }
 
-    public void addTask(Task task) {
-        mTaskRepository.addTask(task);
-    }
-
-    public void deleteTask(Task task) {
-        mTaskRepository.deleteTask(task);
+    public void deleteTask(TaskEntity taskEntity) {
+        mTaskRepository.deleteTask(taskEntity);
     }
 
     public void deleteAllTasks() {

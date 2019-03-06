@@ -26,6 +26,9 @@
         <item name="android:paddingEnd">30dp</item>
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+
+    <style name="menu_item">
+        <item name="android:textColorSecondary">@color/colorAccent</item>
     </style>
 </resources>

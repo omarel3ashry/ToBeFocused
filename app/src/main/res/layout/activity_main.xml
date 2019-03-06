@@ -12,7 +12,6 @@
         tools:context=".ui.main.MainActivity">
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -30,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/listImageView"
                 android:layout_margin="20dp"
-                android:text="Hello World!"
+                android:text="@string/all_tasks"
                 android:textColor="@android:color/white"
                 android:textSize="30sp" />
 
@@ -60,6 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:theme="@style/menu_item"
             app:menu="@menu/nav_items">
 
         </com.google.android.material.navigation.NavigationView>

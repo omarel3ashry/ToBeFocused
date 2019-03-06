@@ -17,11 +17,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select List :" />
+                android:text="@string/select_list" />
 
             <Spinner
+                android:id="@+id/taskListSpinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:entries="@array/task_lists"
                 android:spinnerMode="dropdown" />
         </LinearLayout>
 
@@ -43,7 +45,7 @@
             android:paddingEnd="20dp">
 
             <CheckBox
-                android:id="@+id/addDetailCheckBox"
+                android:id="@+id/addDescriptionCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -58,10 +60,20 @@
                 android:contentDescription="@string/pick_date"
                 android:src="@drawable/ic_date_range_black_24dp" />
 
+            <TextView
+                android:id="@+id/dateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="50dp"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone"
+                tools:text="10/12/2019" />
+
         </LinearLayout>
 
         <EditText
-            android:id="@+id/detailsEditText"
+            android:id="@+id/descriptionEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"

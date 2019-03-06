@@ -4,16 +4,17 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.widget.Toast;
 
 import com.example.android.tobefocused.R;
-import com.example.android.tobefocused.data.database.Task;
+import com.example.android.tobefocused.data.database.TaskEntity;
 import com.example.android.tobefocused.databinding.ActivityMainBinding;
+import com.example.android.tobefocused.ui.googleTasks.GoogleTasksActivity;
 import com.example.android.tobefocused.ui.detail.TaskDetailActivity;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -30,20 +31,33 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private ActionBarDrawerToggle drawerToggle;
-    private TasksAdapter tasksAdapter = new TasksAdapter();
+    private TasksAdapter tasksAdapter1 = new TasksAdapter();
+    private TasksAdapter tasksAdapter2 = new TasksAdapter();
     private MainViewModel mMainViewModel;
+    private List<TaskEntity> mAllTaskEntities = new ArrayList<>();
+    private List<TaskEntity> mTasksList = new ArrayList<>();
+    private static int taskListIndex = 3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        mMainViewModel.getAllTasks().observe(this, new Observer<List<Task>>() {
+        mMainViewModel.getAllTasks().observe(this, new Observer<List<TaskEntity>>() {
             @Override
-            public void onChanged(List<Task> tasks) {
-                tasksAdapter.submitList(tasks);
+            public void onChanged(List<TaskEntity> taskEntities) {
+                tasksAdapter1.submitList(taskEntities);
+                mAllTaskEntities = taskEntities;
+
             }
         });
+//        mMainViewModel.getTaskList(taskListIndex).observe(this, new Observer<List<TaskEntity>>() {
+//            @Override
+//            public void onChanged(List<TaskEntity> tasks) {
+//                tasksAdapter2.submitList(tasks);
+//            }
+//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupNavDrawer();
         binding.addTaskFab.setOnClickListener(new View.OnClickListener() {
@@ -53,9 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        setupRecyclerView();
-        addNavMenuItem();
+        setupRecyclerView(tasksAdapter1);
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,14 +91,14 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void setupRecyclerView() {
+    private void setupRecyclerView(final TasksAdapter tasksAdapter) {
         binding.taskRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.taskRecyclerView.setAdapter(tasksAdapter);
         tasksAdapter.setOnTaskClickListener(new TasksAdapter.TaskClickListener() {
             @Override
-            public void onClick(Task task) {
+            public void onClick(TaskEntity taskEntity) {
                 Intent intent = new Intent(MainActivity.this, TaskDetailActivity.class);
-                intent.putExtra("taskId", task.getId());
+                intent.putExtra(TaskDetailActivity.EXTRA_TASK_ID, taskEntity.getId());
                 startActivity(intent);
             }
         });
@@ -101,21 +117,22 @@ public class MainActivity extends AppCompatActivity {
                     @NonNull RecyclerView.ViewHolder viewHolder,
                     int direction) {
                 int position = viewHolder.getAdapterPosition();
-                Task task = tasksAdapter.getTaskAtPosition(position);
+                TaskEntity taskEntity = tasksAdapter.getTaskAtPosition(position);
                 if (direction == 4) {
                     Toast.makeText(MainActivity.this,
-                            task.getTitle() + " Deleted"
+                            taskEntity.getTitle() + " Deleted"
                             , Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MainActivity.this,
-                            task.getTitle() + " Finished"
+                            taskEntity.getTitle() + " Finished"
                             , Toast.LENGTH_LONG).show();
                 }
-                mMainViewModel.deleteTask(task);
+                mMainViewModel.deleteTask(taskEntity);
             }
         });
         helper.attachToRecyclerView(binding.taskRecyclerView);
     }
+
 
     private void setupNavDrawer() {
         drawerToggle = new ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close);
@@ -124,14 +141,74 @@ public class MainActivity extends AppCompatActivity {
         binding.navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
                 int id = menuItem.getItemId();
                 switch (id) {
-                    case R.id.today_action:
-                        binding.listName.setText("Today");
+                    case R.id.all_tasks:
+                        binding.listName.setText(getString(R.string.all_tasks));
+                        setupRecyclerView(tasksAdapter1);
+                        tasksAdapter1.notifyDataSetChanged();
                         binding.drawerLayout.closeDrawers();
                         break;
+                    case R.id.index_list:
+                        binding.listName.setText(getString(R.string.index_list));
+                        taskListIndex = 0;
+                        mTasksList.clear();
+                        for (int i = 0; i < mAllTaskEntities.size(); i++) {
+                            if (mAllTaskEntities.get(i).getTaskList() == 0)
+                                mTasksList.add(mAllTaskEntities.get(i));
+                        }
+                        tasksAdapter2.submitList(mTasksList);
+                        setupRecyclerView(tasksAdapter2);
+                        tasksAdapter2.notifyDataSetChanged();
+                        binding.drawerLayout.closeDrawers();
+                        break;
+                    case R.id.home_list:
+                        binding.listName.setText(getString(R.string.home_list));
+                        mTasksList.clear();
+                        taskListIndex = 1;
+                        for (int i = 0; i < mAllTaskEntities.size(); i++) {
+                            if (mAllTaskEntities.get(i).getTaskList() == 1)
+                                mTasksList.add(mAllTaskEntities.get(i));
+                        }
+                        tasksAdapter2.submitList(mTasksList);
+                        setupRecyclerView(tasksAdapter2);
+                        tasksAdapter2.notifyDataSetChanged();
+                        binding.drawerLayout.closeDrawers();
+                        break;
+                    case R.id.work_list:
+                        binding.listName.setText(getString(R.string.work_list));
+                        taskListIndex = 2;
+                        mTasksList.clear();
+                        for (int i = 0; i < mAllTaskEntities.size(); i++) {
+                            if (mAllTaskEntities.get(i).getTaskList() == 2)
+                                mTasksList.add(mAllTaskEntities.get(i));
+                        }
+                        tasksAdapter2.submitList(mTasksList);
+                        setupRecyclerView(tasksAdapter2);
+                        tasksAdapter2.notifyDataSetChanged();
+                        binding.drawerLayout.closeDrawers();
+                        break;
+                    case R.id.other_list:
+                        binding.listName.setText(getString(R.string.other_list));
+                        taskListIndex = 3;
+                        mTasksList.clear();
+                        for (int i = 0; i < mAllTaskEntities.size(); i++) {
+                            if (mAllTaskEntities.get(i).getTaskList() == 3)
+                                mTasksList.add(mAllTaskEntities.get(i));
+                        }
+                        tasksAdapter2.submitList(mTasksList);
+                        setupRecyclerView(tasksAdapter2);
+                        tasksAdapter2.notifyDataSetChanged();
+                        binding.drawerLayout.closeDrawers();
+                        break;
+                    case R.id.google_tasks:
+                        binding.drawerLayout.closeDrawers();
+                        Intent intent = new Intent(MainActivity.this, GoogleTasksActivity.class);
+                        startActivity(intent);
+                        break;
                     case R.id.settings_action:
-                        binding.listName.setText("Settings");
+                        binding.listName.setText(getString(R.string.settings));
                         binding.drawerLayout.closeDrawers();
                         break;
                     default:
@@ -141,15 +218,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void addNavMenuItem() {
-        Menu menu = binding.navigationView.getMenu();
-        SubMenu topChannelMenu = menu.addSubMenu("Top Channels");
-        topChannelMenu.add("One");
-        topChannelMenu.add("Two");
-        topChannelMenu.add("Three");
-        MenuItem menuItem = menu.getItem(menu.size() - 1);
-        menuItem.setTitle(menuItem.getTitle());
-    }
-
 }

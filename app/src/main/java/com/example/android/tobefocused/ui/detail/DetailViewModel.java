@@ -1,9 +1,7 @@
 package com.example.android.tobefocused.ui.detail;
 
 import com.example.android.tobefocused.data.TaskRepository;
-import com.example.android.tobefocused.data.database.Task;
-
-import java.util.List;
+import com.example.android.tobefocused.data.database.TaskEntity;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,19 +13,19 @@ public class DetailViewModel extends ViewModel {
         mTaskRepository = repository;
     }
 
-    public LiveData<Task> getTask(int id) {
+    public LiveData<TaskEntity> getTask(int id) {
         return mTaskRepository.getTask(id);
     }
 
-    public void deleteTask(Task task) {
-        mTaskRepository.deleteTask(task);
+    public void deleteTask(TaskEntity taskEntity) {
+        mTaskRepository.deleteTask(taskEntity);
     }
 
-    public void addTask(Task task) {
-        mTaskRepository.addTask(task);
+    public void addTask(TaskEntity taskEntity) {
+        mTaskRepository.addTask(taskEntity);
     }
 
-    public void updateTask(Task task) {
-        mTaskRepository.updateTask(task);
+    public void updateTask(TaskEntity taskEntity) {
+        mTaskRepository.updateTask(taskEntity);
     }
 }
