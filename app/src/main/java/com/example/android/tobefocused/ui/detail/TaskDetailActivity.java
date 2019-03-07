@@ -4,9 +4,12 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.example.android.tobefocused.R;
 import com.example.android.tobefocused.data.database.TaskEntity;
@@ -33,6 +36,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     public static Date mDate;
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+    private TaskEntity currentTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +50,13 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
             }
         });
         mDetailViewModel = obtainViewModel();
-
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_TASK_ID)) {
             taskId = intent.getIntExtra(EXTRA_TASK_ID, DEFAULT_TASK_ID);
@@ -56,6 +66,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
                 public void onChanged(TaskEntity taskEntity) {
                     mDetailViewModel.getTask(taskId).removeObserver(this);
                     populateUI(taskEntity);
+                    currentTask = taskEntity;
                 }
             });
         }
@@ -94,6 +105,24 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(EXTRA_TASK_ID))
+            getMenuInflater().inflate(R.menu.task_detail, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.delete_task) {
+            mDetailViewModel.deleteTask(currentTask);
+            Toast.makeText(this, R.string.task_cleared, Toast.LENGTH_LONG).show();
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private DetailViewModel obtainViewModel() {

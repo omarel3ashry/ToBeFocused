@@ -14,7 +14,6 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "task_table")
 public class TaskEntity {
 
-    @NonNull
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String title;

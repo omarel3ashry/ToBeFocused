@@ -10,9 +10,10 @@ import android.widget.Toast;
 import com.example.android.tobefocused.R;
 import com.example.android.tobefocused.data.database.TaskEntity;
 import com.example.android.tobefocused.databinding.ActivityMainBinding;
-import com.example.android.tobefocused.ui.googleTasks.GoogleTasksActivity;
 import com.example.android.tobefocused.ui.detail.TaskDetailActivity;
+import com.example.android.tobefocused.util.Reminder;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,28 +37,22 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel mMainViewModel;
     private List<TaskEntity> mAllTaskEntities = new ArrayList<>();
     private List<TaskEntity> mTasksList = new ArrayList<>();
-    private static int taskListIndex = 3;
-
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mMainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
         mMainViewModel.getAllTasks().observe(this, new Observer<List<TaskEntity>>() {
             @Override
             public void onChanged(List<TaskEntity> taskEntities) {
                 tasksAdapter1.submitList(taskEntities);
                 mAllTaskEntities = taskEntities;
-
             }
         });
-//        mMainViewModel.getTaskList(taskListIndex).observe(this, new Observer<List<TaskEntity>>() {
-//            @Override
-//            public void onChanged(List<TaskEntity> tasks) {
-//                tasksAdapter2.submitList(tasks);
-//            }
-//        });
+        setSupportActionBar(binding.mainToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setupNavDrawer();
         binding.addTaskFab.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         });
         setupRecyclerView(tasksAdapter1);
 
+        Reminder.scheduleUpdateWidgetReminder(this);
 
     }
 
@@ -83,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.delete_all_action) {
             mMainViewModel.deleteAllTasks();
-            Toast.makeText(this, "All tasks cleared.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.all_tasks_cleared, Toast.LENGTH_LONG).show();
         }
 
         if (drawerToggle.onOptionsItemSelected(item))
@@ -120,11 +116,11 @@ public class MainActivity extends AppCompatActivity {
                 TaskEntity taskEntity = tasksAdapter.getTaskAtPosition(position);
                 if (direction == 4) {
                     Toast.makeText(MainActivity.this,
-                            taskEntity.getTitle() + " Deleted"
+                            taskEntity.getTitle() + getString(R.string.deleted)
                             , Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MainActivity.this,
-                            taskEntity.getTitle() + " Finished"
+                            taskEntity.getTitle() + getString(R.string.finished)
                             , Toast.LENGTH_LONG).show();
                 }
                 mMainViewModel.deleteTask(taskEntity);
@@ -152,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.index_list:
                         binding.listName.setText(getString(R.string.index_list));
-                        taskListIndex = 0;
                         mTasksList.clear();
                         for (int i = 0; i < mAllTaskEntities.size(); i++) {
                             if (mAllTaskEntities.get(i).getTaskList() == 0)
@@ -166,7 +161,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.home_list:
                         binding.listName.setText(getString(R.string.home_list));
                         mTasksList.clear();
-                        taskListIndex = 1;
                         for (int i = 0; i < mAllTaskEntities.size(); i++) {
                             if (mAllTaskEntities.get(i).getTaskList() == 1)
                                 mTasksList.add(mAllTaskEntities.get(i));
@@ -178,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.work_list:
                         binding.listName.setText(getString(R.string.work_list));
-                        taskListIndex = 2;
                         mTasksList.clear();
                         for (int i = 0; i < mAllTaskEntities.size(); i++) {
                             if (mAllTaskEntities.get(i).getTaskList() == 2)
@@ -191,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.other_list:
                         binding.listName.setText(getString(R.string.other_list));
-                        taskListIndex = 3;
                         mTasksList.clear();
                         for (int i = 0; i < mAllTaskEntities.size(); i++) {
                             if (mAllTaskEntities.get(i).getTaskList() == 3)
@@ -200,15 +192,6 @@ public class MainActivity extends AppCompatActivity {
                         tasksAdapter2.submitList(mTasksList);
                         setupRecyclerView(tasksAdapter2);
                         tasksAdapter2.notifyDataSetChanged();
-                        binding.drawerLayout.closeDrawers();
-                        break;
-                    case R.id.google_tasks:
-                        binding.drawerLayout.closeDrawers();
-                        Intent intent = new Intent(MainActivity.this, GoogleTasksActivity.class);
-                        startActivity(intent);
-                        break;
-                    case R.id.settings_action:
-                        binding.listName.setText(getString(R.string.settings));
                         binding.drawerLayout.closeDrawers();
                         break;
                     default:

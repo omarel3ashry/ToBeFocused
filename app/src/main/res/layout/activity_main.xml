@@ -15,10 +15,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/mainToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?actionBarSize"
+                    android:theme="@style/ToolBarStyle"
+                    app:contentInsetStart="72dp"
+                    app:layout_collapseMode="pin" />
+
+            </com.google.android.material.appbar.AppBarLayout>
+
             <ImageView
                 android:id="@+id/listImageView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="150dp"
+                android:layout_below="@id/appBar"
                 android:contentDescription="@string/list_image"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_launcher_background" />
@@ -59,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:layout_marginTop="?actionBarSize"
             android:theme="@style/menu_item"
             app:menu="@menu/nav_items">
 

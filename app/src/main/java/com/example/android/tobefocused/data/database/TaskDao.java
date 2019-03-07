@@ -20,6 +20,9 @@ public interface TaskDao {
     @Query("SELECT * FROM task_table")
     LiveData<List<TaskEntity>> getAllTasks();
 
+    @Query("SELECT * FROM task_table")
+    List<TaskEntity> getAllTasksAsync();
+
     @Query("SELECT * FROM task_table WHERE id = :id")
     LiveData<TaskEntity> getTaskById(int id);
 

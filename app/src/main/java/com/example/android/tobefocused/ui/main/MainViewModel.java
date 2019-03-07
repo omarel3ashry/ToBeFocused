@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-class MainViewModel extends AndroidViewModel {
+public class MainViewModel extends AndroidViewModel {
     private TaskRepository mTaskRepository;
     private LiveData<List<TaskEntity>> mAllTasks;
 
