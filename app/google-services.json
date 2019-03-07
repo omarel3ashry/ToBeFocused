@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "467837048186",
+    "firebase_url": "https://tobefocused-f4544.firebaseio.com",
+    "project_id": "tobefocused-f4544",
+    "storage_bucket": "tobefocused-f4544.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467837048186:android:54ab3bb03f2879e9",
+        "android_client_info": {
+          "package_name": "com.example.android.tobefocused"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467837048186-deh1n054gciq56a10bt1it064ukt2cvf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.tobefocused",
+            "certificate_hash": "effe7de964350f6129cd65a1e7a42eb95eb4e5b1"
+          }
+        },
+        {
+          "client_id": "467837048186-rkjk8nhq1heu28senneob7oj332bheup.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ9nG3n2jl4_rwU39N8QolOlx1fssiHRA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467837048186-rkjk8nhq1heu28senneob7oj332bheup.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

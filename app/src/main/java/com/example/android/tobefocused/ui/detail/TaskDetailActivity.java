@@ -37,6 +37,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private SimpleDateFormat formatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
     private TaskEntity currentTask;
+    private String formatedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,19 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
                 finish();
             }
         });
+        if (savedInstanceState != null && savedInstanceState.containsKey("dateKey")) {
+            formatedDate = savedInstanceState.getString("dateKey");
+            binding.setDateImageButton.setImageResource(R.drawable.ic_date_range_primary_24dp);
+            binding.dateTextView.setVisibility(View.VISIBLE);
+            binding.dateTextView.setText(formatedDate);
+        }
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (formatedDate != null && !formatedDate.isEmpty())
+            outState.putString("dateKey", formatedDate);
     }
 
     @Override
@@ -163,10 +176,10 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
         Calendar c = Calendar.getInstance();
         c.set(year, month, dayOfMonth);
         mDate = c.getTime();
-        String date = formatter.format(mDate);
+        formatedDate = formatter.format(mDate);
         binding.setDateImageButton.setImageResource(R.drawable.ic_date_range_primary_24dp);
         binding.dateTextView.setVisibility(View.VISIBLE);
-        binding.dateTextView.setText(date);
+        binding.dateTextView.setText(formatedDate);
     }
 
 }
