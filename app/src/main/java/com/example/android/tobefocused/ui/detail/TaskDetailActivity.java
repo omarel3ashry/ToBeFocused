@@ -105,8 +105,8 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
                 finish();
             }
         });
-        if (savedInstanceState != null && savedInstanceState.containsKey("dateKey")) {
-            formatedDate = savedInstanceState.getString("dateKey");
+        if (savedInstanceState != null && savedInstanceState.containsKey(getString(R.string.date_key))) {
+            formatedDate = savedInstanceState.getString(getString(R.string.date_key));
             binding.setDateImageButton.setImageResource(R.drawable.ic_date_range_primary_24dp);
             binding.dateTextView.setVisibility(View.VISIBLE);
             binding.dateTextView.setText(formatedDate);
@@ -117,7 +117,7 @@ public class TaskDetailActivity extends AppCompatActivity implements DatePickerD
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (formatedDate != null && !formatedDate.isEmpty())
-            outState.putString("dateKey", formatedDate);
+            outState.putString(getString(R.string.date_key), formatedDate);
     }
 
     @Override
